@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>אימון אנגלית - סגנון אמירנט (רמה בינונית)</title>
+<style>
+:root{--bg:#f6f3ec;--card:#fffdf8;--ink:#1f2933;--mute:#5f6b76;--line:#e2dccf;--acc:#0f6b64;--acc2:#e8f2f0;--ok:#1f7a4a;--okbg:#e3f3e9;--bad:#b3362b;--badbg:#fbe9e6;--warn:#fff4d6}
+*{box-sizing:border-box}
+html,body{margin:0;max-width:100%;overflow-x:hidden}
+body{background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:640px;margin:0 auto;padding:16px 14px 40px}
+h1{font-size:1.45rem;line-height:1.25;margin:6px 0 8px}
+h2{font-size:1.15rem;margin:0 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0}
+.note{background:var(--warn);border:1px solid #ead9a0;border-radius:12px;padding:10px 12px;font-size:.95rem}
+.en{direction:ltr;text-align:left;unicode-bidi:isolate;font-family:Georgia,"Times New Roman",serif;font-size:1.05rem;overflow-wrap:anywhere}
+.passage{background:#fbf8ef;border:1px solid var(--line);border-radius:10px;padding:12px;margin:0 0 12px;max-height:none}
+.passage p{margin:0 0 .7em}.passage p:last-child{margin:0}
+.ptitle{font-weight:700;font-family:system-ui,sans-serif;margin-bottom:6px}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:12px;padding:12px 18px;min-height:46px}
+.btn.sec{background:#fff;color:var(--acc);border:1.5px solid var(--acc)}
+.btn:disabled{opacity:.4;cursor:default}
+.row{display:flex;gap:10px;justify-content:space-between;margin-top:14px}
+.row .btn{flex:1}
+.opt{display:flex;gap:10px;width:100%;direction:ltr;text-align:left;align-items:flex-start;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;margin:8px 0;color:var(--ink);font-family:Georgia,serif;font-size:1.02rem;line-height:1.4;overflow-wrap:anywhere}
+.opt b{flex:none;width:24px;height:24px;border-radius:50%;background:var(--acc2);color:var(--acc);display:grid;place-items:center;font:700 .8rem system-ui}
+.opt.sel{border-color:var(--acc);background:var(--acc2)}
+.opt.sel b{background:var(--acc);color:#fff}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}.opt.bad{border-color:var(--bad);background:var(--badbg)}
+.opt:disabled{cursor:default}
+.prog{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin:8px 0 4px}
+.prog i{display:block;height:100%;background:var(--acc);width:0;transition:width .25s}
+.meta{display:flex;justify-content:space-between;color:var(--mute);font-size:.88rem}
+.chip{display:inline-block;background:var(--acc2);color:var(--acc);border-radius:20px;padding:2px 10px;font-size:.82rem;margin-inline-end:6px}
+.q{font-weight:600;margin:0 0 6px}
+.big{font-size:2.6rem;font-weight:800;color:var(--acc);line-height:1.1}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin:4px 0 12px}
+.bar i{display:block;height:100%;background:var(--acc)}
+.sec-line{display:flex;justify-content:space-between;gap:8px;font-size:.98rem}
+.prac{border-inline-start:4px solid var(--acc);padding:6px 10px;margin:10px 0;background:#fff;border-radius:8px}
+.prac small{color:var(--mute);display:block}
+.rev{border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
+.why{background:var(--acc2);border-radius:10px;padding:8px 10px;margin-top:8px;font-size:.95rem}
+.tag-ok{color:var(--ok);font-weight:700}.tag-bad{color:var(--bad);font-weight:700}
+.hide{display:none}
+.foot{color:var(--mute);font-size:.85rem;margin-top:22px;text-align:center}
+ul.clean{padding-inline-start:20px;margin:6px 0}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+// correct answer is always first in the data; options are shuffled when the test starts
+var SECTIONS=[
+{id:"sc",name:"השלמת משפטים",en:"Sentence Completion",intro:"בחרו את המילה או הצירוף שמשלימים את המשפט נכון.",qs:[
+{q:"The manager was ___ with the results, so she decided to give everyone a bonus.",o:["satisfied","curious","nervous","careless"],t:"אוצר מילים",w:"satisfied = מרוצה. מתנה לכולם מתאימה למנהלת מרוצה."},
+{q:"If I ___ more time, I would learn to play the piano.",o:["had","have","will have","having"],t:"משפטי תנאי",w:"תנאי דמיוני (משהו שלא קורה עכשיו): If + past simple, would + verb."},
+{q:"She didn't go to the party ___ she was feeling tired.",o:["because","although","unless","while"],t:"מילות קישור",w:"because = כי. המשפט השני הוא הסיבה לכך שלא הלכה."},
+{q:"The new law will ___ the amount of plastic used in stores.",o:["reduce","produce","prefer","protect"],t:"אוצר מילים",w:"reduce = להפחית. שימו לב להבדל מ-produce (לייצר)."},
+{q:"He is the only one of my friends ___ lives abroad.",o:["who","whom","whose","which"],t:"כינויי קישור",w:"who משמש לאנשים כנושא המשפט (הוא גר). whose = של מי, whom = אובייקט."},
+{q:"By the time we arrived, the movie ___ already started.",o:["had","has","was","is"],t:"זמנים",w:"By the time + עבר פשוט, מה שקרה קודם הוא past perfect: had + פועל בצורה השלישית."},
+{q:"Scientists are trying to find a ___ for the disease, but so far nothing has worked.",o:["cure","crowd","cost","coast"],t:"אוצר מילים",w:"cure = תרופה, ריפוי. שאר המילים נשמעות דומה אבל משמעותן אחרת."},
+{q:"___ the heavy rain, the match was not cancelled.",o:["Despite","Because of","Unless","Since"],t:"מילות קישור",w:"Despite = למרות, ואחריה שם עצם the heavy rain. הניגוד: גשם חזק אבל המשחק התקיים."},
+{q:"My brother is much ___ than I am; he can lift almost anything.",o:["stronger","strongest","more strong","strong"],t:"מדרגות השוואה",w:"מילה קצרה + than = סיומת er stronger. strongest מתאים להשוואה בין שלושה ומעלה."},
+{q:"The teacher asked the students to ___ their essays before handing them in.",o:["revise","rescue","reject","resist"],t:"אוצר מילים",w:"revise = לתקן ולשפר טקסט. rescue = להציל, reject = לדחות, resist = להתנגד."}
+]},
+{id:"rs",name:"ניסוח מחדש",en:"Restatement",intro:"בחרו את המשפט שמשמעותו הקרובה ביותר למשפט המקורי.",qs:[
+{q:"Although the exam was difficult, most students passed it.",o:["Most students passed the exam even though it was difficult.","The exam was difficult because most students passed it.","Most students failed because the exam was difficult.","The exam was easy, so most students passed it."],t:"מילות קישור",w:"Although = even though = למרות ש. יש ניגוד: קשה, ובכל זאת עברו."},
+{q:"I wish I had studied more for the test.",o:["I regret not studying more for the test.","I studied a lot for the test.","I will study more for the test.","I am studying for the test now."],t:"משפטי תנאי ו-wish",w:"wish + past perfect = חרטה על משהו שקרה בעבר לא למדתי מספיק."},
+{q:"Unless you hurry, you will miss the bus.",o:["If you don't hurry, you will miss the bus.","If you hurry, you will miss the bus.","You will miss the bus because you hurried.","Hurrying will make you miss the bus."],t:"משפטי תנאי ו-wish",w:"Unless = if ... not. אם לא תמהר, תפספס את האוטובוס."},
+{q:"The report was written by the new employee.",o:["The new employee wrote the report.","The new employee will write the report.","The report wrote about the new employee.","The new employee was reading the report."],t:"סביל",w:"משפט סביל was written by הופך לפעיל: מי שעשה את הפעולה הופך לנושא wrote."},
+{q:"She said to me, \"I will call you tomorrow.\"",o:["She told me that she would call me the next day.","She told me that she had called me the day before.","She asked me to call her the next day.","She told me that I would call her tomorrow."],t:"דיבור עקיף",w:"בדיבור עקיף will הופך ל-would, ו-tomorrow הופך ל-the next day. מי שמתקשר הוא היא."},
+{q:"He is too tired to drive.",o:["He is so tired that he can't drive.","He is tired enough to drive.","He is not tired, so he can drive.","He drives because he is tired."],t:"מבנים מיוחדים",w:"too + תואר + to = יותר מדי כדי ש... כלומר הוא לא יכול לנהוג."},
+{q:"Not only did the company lose money, but it also lost its best workers.",o:["The company lost both money and its best workers.","The company lost money but kept its best workers.","The company lost its best workers because it lost money.","The company lost only money."],t:"מבנים מיוחדים",w:"Not only ... but also = לא רק ... אלא גם. שני הדברים קרו."},
+{q:"Hardly anyone came to the meeting.",o:["Very few people came to the meeting.","Almost everyone came to the meeting.","Nobody came to the meeting.","Many people came to the meeting."],t:"כמתים ושלילה",w:"hardly anyone = כמעט אף אחד = מעט מאוד אנשים. Nobody חזק יותר: ממש אף אחד."}
+]},
+{id:"rc",name:"הבנת הנקרא",en:"Reading Comprehension",intro:"קראו כל קטע ועברו לשאלות. חזרו לטקסט כמה פעמים שתרצו.",passages:[
+{title:"Sleep and Teenagers",text:["Many teenagers do not get enough sleep. Doctors say that people between the ages of 13 and 18 need about nine hours of sleep each night, but studies show that most teenagers sleep for only six or seven hours. One reason is biological. During the teenage years, the body clock changes, and young people begin to feel tired later in the evening. Another reason is technology. Many teenagers use their phones until late at night, and the bright light from the screen makes it harder for the brain to relax.","The results of too little sleep can be serious. Students who are tired find it difficult to concentrate in class, and they often forget what they have learned. Some schools have therefore decided to start the school day an hour later. In one town where this change was made, test scores went up and fewer students were late. Experts also suggest that teenagers turn off their phones at least an hour before bed."],
+qs:[
+{q:"What is the main idea of the text?",o:["Teenagers often sleep too little, and there are reasons and results.","Phones are the only reason teenagers feel tired.","Schools should stop giving tests to teenagers.","Teenagers need less sleep than adults."],t:"רעיון מרכזי",w:"הטקסט מדבר על חוסר שינה, על הסיבות לו ועל ההשלכות. תשובות אחרות מקטינות או הופכות את הנאמר."},
+{q:"According to the text, why do teenagers feel tired later in the evening?",o:["Their body clock changes as they grow.","They drink too much coffee.","They have a lot of homework.","They go to school too early."],t:"פרט בטקסט",w:"כתוב במפורש: During the teenage years, the body clock changes."},
+{q:"What happened in the town that started school later?",o:["Test scores rose and fewer students were late.","Students slept for nine hours every night.","Teachers started to give more homework.","Students stopped using their phones."],t:"פרט בטקסט",w:"המשפט: test scores went up and fewer students were late."},
+{q:"The word \"concentrate\" paragraph 2 is closest in meaning to:",o:["focus","relax","argue","travel"],t:"מילה בהקשר",w:"קשה לתלמידים עייפים to concentrate in class = להתמקד, להתרכז. focus הוא המילה הקרובה."}
+]},
+{title:"A Library of Things",text:["In some cities, you can now borrow more than books from the library. A \"library of things\" lets people borrow tools, cameras, camping equipment, and even musical instruments for a small fee or for free. The idea began when people realized that many of us buy things we use only a few times. A drill, for example, is used for just a few minutes in its whole life, yet millions of families own one.","Supporters say that the idea saves money and is good for the environment, since fewer products need to be made. It also helps neighbors meet each other. However, there are some problems. Items can break or get lost, and volunteers must spend time repairing them. Some critics also worry that people will not take good care of things that do not belong to them. Despite these worries, new libraries of things open every year, and many of them are very popular."],
+qs:[
+{q:"Why did the idea of a library of things begin?",o:["People noticed that they own things they rarely use.","Books became too expensive for most people.","Cities wanted to sell more tools.","Volunteers needed a place to work."],t:"פרט בטקסט",w:"הרעיון התחיל כשהבינו שאנשים קונים דברים שמשתמשים בהם רק כמה פעמים."},
+{q:"Which of these is NOT mentioned as a benefit?",o:["The borrowed items last longer.","People save money.","It is good for the environment.","Neighbors get to know each other."],t:"פרט בטקסט",w:"בשאלות NOT מחפשים את הדבר היחיד שלא מופיע. שלושת הדברים האחרים מוזכרים בפסקה השנייה."},
+{q:"What can we understand from the last sentence of the text?",o:["Libraries of things are becoming more common in spite of the problems.","Libraries of things are closing because of the problems.","Nobody wants to use libraries of things.","The problems have already been solved."],t:"הסקה",w:"Despite these worries = למרות החששות. ועדיין נפתחות עוד ספריות מדי שנה ורבות פופולריות."},
+{q:"The word \"critics\" refers to people who:",o:["have doubts about the idea.","repair broken items.","borrow the most items.","work at the library."],t:"מילה בהקשר",w:"critics = מבקרים. בהקשר: אנשים שמודאגים ומצביעים על חסרונות."}
+]}
+]}
+];
+var TIPS={
+"אוצר מילים":"קראו קטעים קצרים באנגלית כל יום וכתבו 5 מילים חדשות עם משפט לדוגמה. שימו לב במיוחד למילים שנשמעות דומות אבל שונות במשמעות.",
+"משפטי תנאי":"חזרו על שלושת סוגי ה-if: מציאותי: If + present, will. דמיוני: If + past, would. בלתי אפשרי בעבר: If + past perfect, would have.",
+"משפטי תנאי ו-wish":"חזרו על שלושת סוגי ה-if, על unless = if ... not ועל wish + past perfect לחרטה.",
+"מילות קישור":"הכינו טבלה: because / since סיבה, although / despite / however ניגוד, so / therefore תוצאה. שימו לב מה בא אחרי כל אחת: משפט שלם או שם עצם.",
+"כינויי קישור":"תרגלו who / whom / whose / which / that: מתי מדובר באדם, בחפץ או בבעלות.",
+"זמנים":"חזרו על present perfect מול past simple, ועל past perfect had + past participle לדבר שקרה לפני דבר אחר בעבר.",
+"מדרגות השוואה":"תרגלו -er / -est למילים קצרות, more / most למילים ארוכות, והצורות החריגות: good, better, best.",
+"סביל":"תרגלו הפיכה של משפט פעיל לסביל ולהפך בכמה זמנים: is done, was done, will be done, has been done.",
+"דיבור עקיף":"בדיבור עקיף הזמן 'זז אחורה' (will הופך ל-would, can ל-could) ומילות זמן משתנות (tomorrow הופך ל-the next day).",
+"מבנים מיוחדים":"תרגלו too / enough / so ... that ו-not only ... but also, ומשפטים שבהם הפועל העזר קופץ לפני הנושא.",
+"כמתים ושלילה":"הבדילו בין few / a few, hardly any / no, almost all / all. אלה מילים שמשנות את המשמעות כולה.",
+"רעיון מרכזי":"אחרי הקריאה שאלו: על מה הטקסט כולו? תשובה נכונה תכסה את כל הקטע ולא רק משפט אחד.",
+"פרט בטקסט":"חפשו את המילים של השאלה בטקסט וקראו את המשפט שמסביב. בשאלות NOT בדקו כל אפשרות מול הטקסט.",
+"הסקה":"שאלות הסקה לא כתובות במפורש. חפשו מה הכותב רומז ובחרו את התשובה שהטקסט תומך בה, בלי להוסיף מידע משלכם.",
+"מילה בהקשר":"אם לא מכירים מילה, קראו את המשפט שלפניה ואחריה. נסו להחליף במילה שאתם מכירים ובדקו אם המשפט עדיין הגיוני."
+};
+var app=document.getElementById("app");
+var state={};
+var LET=["A","B","C","D"];
+function ltr(s){return s.replace(/[A-Za-z][A-Za-z0-9'\/+=.\- ]*[A-Za-z0-9']/g,function(m){return '<bdi dir="ltr" lang="en">'+m+'</bdi>'})}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function build(){
+  var items=[];
+  SECTIONS.forEach(function(s,si){
+    var list=[];
+    if(s.passages){s.passages.forEach(function(p,pi){p.qs.forEach(function(q){list.push({q:q,p:p})})})}
+    else s.qs.forEach(function(q){list.push({q:q})});
+    list.forEach(function(x){
+      items.push({sec:si,q:x.q.q,t:x.q.t,w:x.q.w,passage:x.p||null,
+        opts:shuffle(x.q.o.map(function(txt,i){return {txt:txt,ok:i===0}})),pick:-1});
+    });
+  });
+  state={items:items,i:0,shown:{}};
+}
+function start(){
+  app.innerHTML='<h1>אימון אנגלית בסגנון אמירנט</h1>'+
+  '<div class="note"><b>חשוב לדעת:</b> זהו כלי אימון, לא מבחן רשמי ולא ציון אמיתי. השאלות נכתבו במיוחד לאימון בסגנון המבחן, ברמה בינונית. הציון כאן נועד רק להראות מה כדאי לחזק.</div>'+
+  '<div class="card"><h2>מה יש במבחן</h2><ul class="clean">'+
+  SECTIONS.map(function(s){var n=s.passages?s.passages.reduce(function(a,p){return a+p.qs.length},0):s.qs.length;return '<li><b>'+s.name+'</b> &middot; <bdi dir="ltr" lang="en">'+s.en+'</bdi> &middot; '+n+' שאלות</li>'}).join('')+
+  '</ul><p style="margin:8px 0 0">26 שאלות, בערך 25 דקות. אין שעון, קחו את הזמן. בסוף תקבלו ציון, פירוק לפי חלקים, הסבר לכל תשובה ורשימה של מה לתרגל.</p></div>'+
+  '<button class="btn" style="width:100%" id="go">מתחילים</button>'+
+  '<div class="foot">הוראות בעברית, תוכן המבחן באנגלית</div>';
+  document.getElementById("go").onclick=function(){build();render()};
+}
+function render(){
+  var it=state.items[state.i],n=state.items.length,s=SECTIONS[it.sec];
+  var firstOfSec=state.i===0||state.items[state.i-1].sec!==it.sec;
+  var h='<div class="meta"><span>'+s.name+'</span><bdi dir="ltr">'+(state.i+1)+' / '+n+'</bdi></div><div class="prog"><i style="width:'+(state.i/n*100)+'%"></i></div>';
+  if(firstOfSec)h+='<div class="card" style="margin:10px 0"><h2>'+s.name+' <span class="en" style="display:inline;font-size:.9rem;color:var(--mute)">'+s.en+'</span></h2><div>'+s.intro+'</div></div>';
+  h+='<div class="card">';
+  if(it.passage){h+='<div class="passage en"><div class="ptitle">'+esc(it.passage.title)+'</div>'+it.passage.text.map(function(p){return '<p>'+esc(p)+'</p>'}).join('')+'</div>'}
+  h+='<p class="q en">'+esc(it.q)+'</p>';
+  it.opts.forEach(function(o,k){h+='<button class="opt'+(it.pick===k?' sel':'')+'" data-k="'+k+'"><b>'+LET[k]+'</b><span>'+esc(o.txt)+'</span></button>'});
+  h+='</div><div class="row"><button class="btn sec" id="prev"'+(state.i===0?' disabled':'')+'>הקודם</button><button class="btn" id="next"'+(it.pick<0?' disabled':'')+'>'+(state.i===n-1?'סיום וציון':'הבא')+'</button></div>';
+  app.innerHTML=h;
+  Array.prototype.forEach.call(app.querySelectorAll(".opt"),function(b){b.onclick=function(){it.pick=+b.dataset.k;render()}});
+  document.getElementById("prev").onclick=function(){state.i--;render();window.scrollTo(0,0)};
+  document.getElementById("next").onclick=function(){if(state.i===n-1)results();else{state.i++;render();window.scrollTo(0,0)}};
+}
+function results(){
+  var items=state.items,tot=0,per=SECTIONS.map(function(){return {c:0,n:0}}),tags={};
+  items.forEach(function(it){
+    var ok=it.pick>=0&&it.opts[it.pick].ok;it.ok=ok;
+    per[it.sec].n++;if(ok){per[it.sec].c++;tot++}else{tags[it.t]=(tags[it.t]||0)+1}
+  });
+  var pct=Math.round(tot/items.length*100);
+  var verdict=pct>=85?"תוצאה חזקה. כדאי לעבור על הטעויות הבודדות ולעלות לתרגול ברמה קשה יותר.":pct>=65?"בסיס טוב. יש כמה נושאים ספציפיים שכדאי לחזק, הם ברשימה למטה.":pct>=45?"יש על מה לעבוד, וזה בסדר. התחילו מהנושאים הראשונים ברשימה ותרגלו שוב.":"זה רק תרגול ראשון. התחילו מהבסיס ברשימה למטה, ותנסו שוב בעוד כמה ימים.";
+  var h='<h1>התוצאה שלך</h1><div class="card"><div class="big"><bdi dir="ltr">'+tot+' / '+items.length+'</bdi></div><div style="color:var(--mute)">'+pct+'% תשובות נכונות</div><p style="margin:8px 0 0">'+verdict+'</p></div>';
+  h+='<div class="card"><h2>לפי חלקים</h2>'+SECTIONS.map(function(s,i){var p=per[i];return '<div class="sec-line"><span>'+s.name+'</span><b><bdi dir="ltr">'+p.c+' / '+p.n+'</bdi></b></div><div class="bar"><i style="width:'+(p.c/p.n*100)+'%"></i></div>'}).join('')+'</div>';
+  var tk=Object.keys(tags).sort(function(a,b){return tags[b]-tags[a]});
+  h+='<div class="card"><h2>מה כדאי לתרגל</h2>';
+  if(!tk.length)h+='<p>לא היו טעויות. כל הכבוד! לתרגול נוסף אפשר ללמוד מילים חדשות ולקרוא טקסטים ארוכים יותר.</p>';
+  else h+=tk.map(function(t){return '<div class="prac"><b>'+t+'</b> <small>'+tags[t]+' '+(tags[t]===1?'טעות':'טעויות')+'</small>'+ltr(TIPS[t]||'')+'</div>'}).join('');
+  h+='</div>';
+  h+='<div class="card"><h2>הסבר לכל שאלה</h2><div class="row" style="margin:0 0 6px"><button class="btn sec" id="fAll">הכל</button><button class="btn sec" id="fBad">רק טעויות</button></div><div id="rev"></div></div>';
+  h+='<div class="row"><button class="btn" id="again">מבחן חדש (סדר תשובות אחר)</button></div>';
+  h+='<div class="foot">כלי אימון בלבד. לא מבחן רשמי ולא מחליף הכנה מסודרת.</div>';
+  app.innerHTML=h;window.scrollTo(0,0);
+  function rev(onlyBad){
+    var out='';
+    items.forEach(function(it,i){
+      if(onlyBad&&it.ok)return;
+      var right=it.opts.filter(function(o){return o.ok})[0].txt;
+      out+='<div class="rev"><span class="chip">'+SECTIONS[it.sec].name+'</span><span class="chip">'+it.t+'</span> <span class="'+(it.ok?'tag-ok':'tag-bad')+'">'+(it.ok?'נכון':(it.pick<0?'לא נענתה':'לא נכון'))+'</span>'+
+      '<p class="q en" style="margin-top:8px">'+(i+1)+'. '+esc(it.q)+'</p>'+
+      (it.ok?'':'<div class="en" style="color:var(--bad)">Your answer: '+(it.pick<0?'-':esc(it.opts[it.pick].txt))+'</div>')+
+      '<div class="en" style="color:var(--ok)">Correct: '+esc(right)+'</div><div class="why">'+ltr(it.w)+'</div></div>';
+    });
+    if(!out)out='<p>אין טעויות להצגה.</p>';
+    document.getElementById("rev").innerHTML=out;
+  }
+  rev(true);
+  document.getElementById("fAll").onclick=function(){rev(false)};
+  document.getElementById("fBad").onclick=function(){rev(true)};
+  document.getElementById("again").onclick=function(){build();render();window.scrollTo(0,0)};
+}
+start();
+</script>
+</body>
+</html>
